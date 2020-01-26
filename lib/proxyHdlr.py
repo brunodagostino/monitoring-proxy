@@ -29,15 +29,14 @@ def proxyHdlr(clientSock):
     localBuffer = recvFrom(clientSock)
 #     localBuffer = clientSock.recv(4096)
                         
-#     if len(localBuffer):
-    _proxyHdlrLogger.log(logging.INFO, "[ProxyHandler] " + str(localBuffer))
-    localBuffer, remoteHost, remotePort = reqHdlr(localBuffer)
-            
-    _proxyHdlrLogger.log(logging.INFO, "[ProxyHandler] " + str(localBuffer) + " | " + remoteHost + ":" + str(remotePort))
+    if len(localBuffer):
+        _proxyHdlrLogger.log(logging.INFO, "[ProxyHandler] " + str(localBuffer))
+        localBuffer, remoteHost, remotePort = reqHdlr(localBuffer)
+        _proxyHdlrLogger.log(logging.INFO, "[ProxyHandler] " + str(localBuffer) + " | " + remoteHost + ":" + str(remotePort))
                        
-    remoteSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    remoteSocket.connect((remoteHost, remotePort))
-    remoteSocket.send(localBuffer)
+        remoteSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        remoteSocket.connect((remoteHost, remotePort))
+        remoteSocket.send(localBuffer)
     
     while True:
         remoteBuffer = recvFrom(remoteSocket)
