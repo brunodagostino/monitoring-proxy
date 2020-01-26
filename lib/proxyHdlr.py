@@ -32,7 +32,7 @@ def proxyHdlr(clientSock):
         if len(localBuffer):
             localBuffer, remoteHost, remotePort = reqHdlr(localBuffer)
             
-            _proxyHdlrLogger.log(logging.INFO, "[ProxyHandler] " + localBuffer + " | " + remoteHost + ":" + str(remotePort))
+            _proxyHdlrLogger.log(logging.INFO, "[ProxyHandler] " + str(localBuffer) + " | " + remoteHost + ":" + str(remotePort))
                        
             remoteSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             remoteSocket.connect((remoteHost, remotePort))
