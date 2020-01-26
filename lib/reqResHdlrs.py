@@ -23,11 +23,11 @@ def reqHdlr(buffer):
     '''
     o = urlparse(str(buffer.split(b" ")[1]))
     host = o.netloc
-    port = o.port
+    port = int(o.port)
     
     if host == "":
         host = o.path.split(":")[0]
-        port = o.path.split(":")[1]
+        port = int(o.path.split(":")[1])
     elif host != "" and port == None:
         port = 80
         
