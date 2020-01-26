@@ -21,17 +21,17 @@ def reqHdlr(buffer):
     '''
     request handling process
     '''
-    o = urlparse(str(buffer.split(b" ")[1]))
+    o = urlparse(str(buffer).split(" ")[1])
     host = o.netloc
-    port = int(o.port)
+    port = o.port
     
     if host == "":
         host = o.path.split(":")[0]
-        port = int(o.path.split(":")[1])
+        port = o.path.split(":")[1]
     elif host != "" and port == None:
         port = 80
         
-    return (buffer, host, port)
+    return (buffer, host, int(port))
 
 
 def resHdlr(buffer):
