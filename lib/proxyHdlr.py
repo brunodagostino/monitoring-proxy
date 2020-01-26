@@ -5,16 +5,11 @@ This module contains the proxy handler function used by other modules.
 # ***************************************
 # Imports
 # ***************************************
-import logging
 import socket
 
 from lib.readBuffer import recvFrom
 from lib.reqResHdlrs import reqHdlr, resHdlr
 
-# *****************************************
-# Local variables
-# *****************************************
-_proxyHdlrLogger = logging.getLogger("monitoringProxy.main.proxyHdlr")
 
 # ***********************************************
 # Functions
@@ -22,9 +17,7 @@ _proxyHdlrLogger = logging.getLogger("monitoringProxy.main.proxyHdlr")
 def proxyHdlr(clientSock):
     '''
     proxy handler process
-    '''        
-    global _proxyHdlrLogger
-    
+    '''            
     while True:
         localBuffer = recvFrom(clientSock)
                         
@@ -43,10 +36,8 @@ def proxyHdlr(clientSock):
             remoteBuffer = resHdlr(remoteBuffer)
             
             clientSock.send(remoteBuffer)
-#             _proxyHdlrLogger.log(logging.INFO, "[Proxy handler] " + localBuffer)
         
         if not len(localBuffer) or not len(remoteBuffer):
             clientSock.close()
-#             remoteSocket.close()
             
             break
