@@ -21,7 +21,7 @@ def reqHdlr(buffer):
     '''
     request handling process
     '''
-    o = urlparse(buffer.split(" ")[1])
+    o = urlparse(str(buffer.split(b" ")[1]))
     host = o.netloc
     port = o.port
     

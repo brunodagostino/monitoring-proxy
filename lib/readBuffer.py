@@ -10,7 +10,7 @@ def recvFrom(conn):
     '''
     read buffer process
     '''
-    buffer = ""
+    buffer = b""
     
     conn.settimeout(2)
     
@@ -21,7 +21,7 @@ def recvFrom(conn):
             if not data:
                 break
             
-            buffer += str(data)
+            buffer += data
     except:
         pass
     
