@@ -26,28 +26,35 @@ def proxyHdlr(clientSock):
     '''
     global _proxyHdlrLogger
     
-    localBuffer = recvFrom(clientSock)
-#     localBuffer = clientSock.recv(4096)
-                        
-    if len(localBuffer):
-        _proxyHdlrLogger.log(logging.INFO, "[ProxyHandler] " + str(localBuffer))
-        localBuffer, remoteHost, remotePort = reqHdlr(localBuffer)
-        _proxyHdlrLogger.log(logging.INFO, "[ProxyHandler] " + str(localBuffer) + " | " + remoteHost + ":" + str(remotePort))
-                       
-        remoteSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        remoteSocket.connect((remoteHost, remotePort))
-        remoteSocket.send(localBuffer)
+    remoteSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    flag = False
     
     while True:
-        remoteBuffer = recvFrom(remoteSocket)
+        localBuffer = recvFrom(clientSock)
+#     localBuffer = clientSock.recv(4096)
+                        
+        if len(localBuffer):
+            _proxyHdlrLogger.log(logging.INFO, "[ProxyHandler] " + str(localBuffer))
+            localBuffer, remoteHost, remotePort = reqHdlr(localBuffer)
+            _proxyHdlrLogger.log(logging.INFO, "[ProxyHandler] " + str(localBuffer) + " | " + remoteHost + ":" + str(remotePort))
+                       
+#             remoteSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            if flag == False:
+                flag = True
+                remoteSock.connect((remoteHost, remotePort))
+                remoteSock.send(localBuffer)
+    
+        remoteBuffer = recvFrom(remoteSock)
 #         remoteBuffer = remoteSocket.recv(4096)
                 
         if len(remoteBuffer):
             remoteBuffer = resHdlr(remoteBuffer)
             
             clientSock.send(remoteBuffer)
-        else:
-            break
         
-    clientSock.close()
-    remoteSocket.close()
+        if not len(localBuffer) or not len(remoteBuffer):
+            clientSock.close()
+            remoteSock.close()
+            flag = False
+            
+            break
